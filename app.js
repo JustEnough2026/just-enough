@@ -1,15 +1,15 @@
 const products=[
 {id:"kou",name:"口水雞（四分之一）",desc:"酸、辣、香，層次豐富",price:180,img:"assets/spicy_chicken.jpg"},
-{id:"oil-q",name:"油雞（四分之一）",desc:"油香滑嫩，冷藏後更好吃",price:150,img:"assets/oil_chicken.jpg"},
-{id:"oil-h",name:"油雞（半雞）",desc:"適合多人分享",price:250,img:"assets/oil_chicken.jpg"},
-{id:"noodle-s",name:"涼粉（小）",desc:"爽口彈滑",price:60,img:"assets/noodles.jpg",options:["酸辣","胡麻"]},
-{id:"noodle-l",name:"涼粉（大）",desc:"爽口彈滑",price:100,img:"assets/noodles.jpg",options:["酸辣","胡麻"]},
-{id:"oil-rice",name:"油雞腿飯",desc:"每日限量",price:110,img:"assets/oil_chicken.jpg"},
-{id:"hainan-rice",name:"海南雞腿飯",desc:"每日限量",price:110,img:"assets/oil_chicken.jpg",options:["辣","不辣"]}
+{id:"oil-q",name:"油雞（四分之一）",desc:"鮮嫩多汁，清爽不膩",price:150,img:"assets/oil_quarter.jpg"},
+{id:"oil-h",name:"油雞（半雞）",desc:"適合多人分享",price:250,img:"assets/oil_half.jpg"},
+{id:"noodle-s",name:"涼粉（小）",desc:"爽口彈滑",price:60,img:"assets/noodles_small.jpg",options:["酸辣","胡麻"]},
+{id:"noodle-l",name:"涼粉（大）",desc:"爽口彈滑",price:100,img:"assets/noodles_large.jpg",options:["酸辣","胡麻"]},
+{id:"oil-rice",name:"油雞腿飯",desc:"新品・每日限量",price:110,img:"assets/oil_rice.jpg"},
+{id:"hainan-rice",name:"海南雞腿飯",desc:"新品・每日限量",price:110,img:"assets/hainan_rice.jpg",options:["辣","不辣"]}
 ];
-const state=JSON.parse(localStorage.getItem("justEnoughCart")||"{}");
+const state=JSON.parse(localStorage.getItem("justEnoughCartV2")||"{}");
 const list=document.querySelector("#product-list"),tpl=document.querySelector("#product-template");
-function save(){localStorage.setItem("justEnoughCart",JSON.stringify(state));renderCartBar()}
+function save(){localStorage.setItem("justEnoughCartV2",JSON.stringify(state));renderBar()}
 products.forEach(p=>{
  const n=tpl.content.cloneNode(true),card=n.querySelector(".product");
  n.querySelector(".product-img").src=p.img;n.querySelector(".product-img").alt=p.name;
@@ -23,19 +23,19 @@ products.forEach(p=>{
 });
 function selected(){return products.filter(p=>state[p.id]?.qty>0)}
 function total(){return selected().reduce((s,p)=>s+p.price*state[p.id].qty,0)}
-function renderCartBar(){const count=selected().reduce((s,p)=>s+state[p.id].qty,0);document.querySelector("#cart-count").textContent=count+" 份";document.querySelector("#cart-total").textContent="$"+total()}
+function renderBar(){const c=selected().reduce((s,p)=>s+state[p.id].qty,0);document.querySelector("#cart-count").textContent=c+" 份";document.querySelector("#cart-total").textContent="$"+total()}
 function buildOrder(){
  const name=document.querySelector("#customer-name").value.trim()||"未填";
  const time=document.querySelector("#pickup-time").value||"未填";
  const note=document.querySelector("#note").value.trim()||"無";
  let lines=["【食材有限 新訂單】","","暱稱："+name,"取餐時間："+time,""];
  selected().forEach(p=>{const opt=state[p.id].option?`（${state[p.id].option}）`:"";lines.push(`${p.name}${opt} × ${state[p.id].qty}　$${p.price*state[p.id].qty}`)});
- lines.push("","總金額：$"+total(),"備註："+note);
- return lines.join("\n");
+ lines.push("","總金額：$"+total(),"備註："+note);return lines.join("\n");
 }
 function openSheet(){const wrap=document.querySelector("#cart-items");wrap.innerHTML="";if(!selected().length)wrap.innerHTML="<p>尚未選擇餐點。</p>";selected().forEach(p=>{const d=document.createElement("div");d.className="cart-item";d.innerHTML=`<div><strong>${p.name}</strong><small>${state[p.id].option||""} × ${state[p.id].qty}</small></div><strong>$${p.price*state[p.id].qty}</strong>`;wrap.appendChild(d)});document.querySelector("#sheet-total").textContent="$"+total();document.querySelector("#cart-sheet").classList.add("open")}
-document.querySelector("#open-cart").onclick=openSheet;document.querySelector("#close-cart").onclick=()=>document.querySelector("#cart-sheet").classList.remove("open");
+document.querySelector("#open-cart").onclick=openSheet;
+document.querySelector("#close-cart").onclick=()=>document.querySelector("#cart-sheet").classList.remove("open");
 document.querySelector("#copy-order").onclick=async()=>{if(!selected().length)return alert("請先選擇餐點");await navigator.clipboard.writeText(buildOrder());alert("訂單文字已複製")};
-document.querySelector("#send-line").onclick=async()=>{if(!selected().length)return alert("請先選擇餐點");const text=buildOrder();try{await navigator.clipboard.writeText(text)}catch(e){}window.open("https://line.me/R/msg/text/?"+encodeURIComponent(text),"_blank")};
-renderCartBar();
+document.querySelector("#send-line").onclick=async()=>{if(!selected().length)return alert("請先選擇餐點");const t=buildOrder();try{await navigator.clipboard.writeText(t)}catch(e){}window.open("https://line.me/R/msg/text/?"+encodeURIComponent(t),"_blank")};
+renderBar();
 if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js"));
