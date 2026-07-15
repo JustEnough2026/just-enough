@@ -64,9 +64,10 @@ function renderBar(){
 }
 function buildOrder(){
   const name=document.querySelector("#customer-name").value.trim()||"未填";
+  const date=document.querySelector("#pickup-date").value||"未填";
   const time=document.querySelector("#pickup-time").value||"未填";
   const note=document.querySelector("#note").value.trim()||"無";
-  let lines=["【食材有限 新訂單】","","暱稱："+name,"取餐時間："+time,""];
+  let lines=["【食材有限 新訂單】","","暱稱："+name,"取餐日期："+date,"取餐時間："+time,""];
   selected().forEach(p=>{
     const opt=state[p.id].option?`（${state[p.id].option}）`:"";
     lines.push(`${p.name}${opt} × ${state[p.id].qty}　$${p.price*state[p.id].qty}`);
