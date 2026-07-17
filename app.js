@@ -5,7 +5,8 @@ const products=[
 {id:"noodle-s",name:"涼粉（小）",desc:"爽口彈滑",price:60,img:"noodles_small.jpg",options:["酸辣","胡麻"]},
 {id:"noodle-l",name:"涼粉（大）",desc:"爽口彈滑",price:100,img:"noodles_large.jpg",options:["酸辣","胡麻"]},
 {id:"oil-rice",name:"油雞腿飯",desc:"新品・每日限量",price:110,img:"oil_rice.jpg"},
-{id:"hainan-rice",name:"海南雞腿飯",desc:"新品・每日限量",price:110,img:"hainan_rice.jpg",options:["辣","不辣"]}
+{id:"hainan-rice-spicy",name:"海南雞腿飯（辣）",desc:"新品・每日限量",price:110,img:"hainan_rice.jpg"},
+{id:"hainan-rice-mild",name:"海南雞腿飯（不辣）",desc:"新品・每日限量",price:110,img:"hainan_rice.jpg"}
 ];
 
 const state=JSON.parse(localStorage.getItem("justEnoughCartV4")||"{}");
