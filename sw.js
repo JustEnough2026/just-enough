@@ -1,4 +1,4 @@
-const CACHE="just-enough-v6";
+const CACHE="just-enough-v7";
 const FILES=[
 "./","index.html","styles.css","app.js","manifest.webmanifest","icon.svg",
 "spicy_chicken.jpg","oil_quarter.jpg","oil_half.jpg",
