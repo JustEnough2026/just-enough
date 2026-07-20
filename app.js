@@ -12,7 +12,7 @@ function initializeStore(){
   $("#line-link").href = store.lineCommunity;
   $("#map-link").href = store.googleMaps;
   $("#info-phone").href = `tel:${store.phone}`;
-
+  $("#info-phone").textContent = store.phoneDisplay;
   $("#info-address").textContent = store.address;
   [["#foodpanda-link",store.foodpanda],["#uber-link",store.uberEats]].forEach(([id,url])=>{
     const el=$(id); if(url){el.href=url}else{el.hidden=true}
@@ -55,7 +55,7 @@ function renderBar(){
 }
 function buildOrder(){
   const name=$("#customer-name").value.trim()||"未填";
-
+  const phone=$("#customer-phone").value.trim()||"未填";
   const date=$("#pickup-date").value||"未填";
   const time=$("#pickup-time").value||"未填";
   const note=$("#note").value.trim()||"無";
