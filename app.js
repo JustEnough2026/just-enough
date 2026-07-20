@@ -8,8 +8,10 @@ function initializeStore(){
   $("#announcement").textContent = store.announcement;
   $("#open-status").textContent = store.open ? `今日營業 ${store.hours}` : "今日店休";
   $("#open-status").classList.toggle("closed", !store.open);
+  $("#phone-link").href = `tel:${store.phone}`;
   $("#line-link").href = store.lineCommunity;
   $("#map-link").href = store.googleMaps;
+  $("#info-phone").href = `tel:${store.phone}`;
 
   $("#info-address").textContent = store.address;
   [["#foodpanda-link",store.foodpanda],["#uber-link",store.uberEats]].forEach(([id,url])=>{
@@ -57,6 +59,7 @@ function buildOrder(){
   const date=$("#pickup-date").value||"未填";
   const time=$("#pickup-time").value||"未填";
   const note=$("#note").value.trim()||"無";
+  const lines=[`【${store.name} ${store.englishName}】`,"",`取餐人：${name}`,`電話：${phone}`,`取餐日期：${date}`,`取餐時間：${time}`,""];
   selected().forEach(p=>lines.push(`${p.name} × ${state[p.id].qty}　${money(p.price*state[p.id].qty)}`));
   lines.push("",`總金額：${money(total())}`,"",`備註：${note}`);
   return lines.join("\n");
