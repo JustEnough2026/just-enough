@@ -59,7 +59,7 @@ function buildOrder(){
   const date=$("#pickup-date").value||"未填";
   const time=$("#pickup-time").value||"未填";
   const note=$("#note").value.trim()||"無";
-  const lines=[`【${store.name} ${store.englishName}】`,"",`取餐人：${name}`,`電話：${phone}`,`取餐日期：${date}`,`取餐時間：${time}`,""];
+  const lines=[`【${store.name} ${store.englishName}】`,"",`取餐人：${name}`,`電話：`,`取餐日期：${date}`,`取餐時間：${time}`,""];
   selected().forEach(p=>lines.push(`${p.name} × ${state[p.id].qty}　${money(p.price*state[p.id].qty)}`));
   lines.push("",`總金額：${money(total())}`,"",`備註：${note}`);
   return lines.join("\n");
