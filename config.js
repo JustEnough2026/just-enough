@@ -15,6 +15,7 @@ window.STORE_CONFIG = {
     uberEats: ""
   },
   products: [
+    { id:"baqi-chicken-noodles", name:"霸氣雞腿涼粉", desc:"雞腿搭配涼粉，份量霸氣", price:120, image:"baqi_chicken_noodles.jpg?v=32", badge:"新品", soldOut:false, stock:null },
     { id:"kou", name:"口水雞（四分之一）", desc:"酸、辣、香，層次豐富", price:180, image:"spicy_chicken.jpg?v=31", badge:"人氣", soldOut:false, stock:null },
     { id:"oil-q", name:"油雞（四分之一）", desc:"鮮嫩多汁，清爽不膩", price:150, image:"oil_quarter.jpg?v=31", badge:"", soldOut:false, stock:null },
     { id:"oil-h", name:"油雞（半隻）", desc:"適合多人分享", price:250, image:"oil_half.jpg?v=31", badge:"", soldOut:false, stock:null },

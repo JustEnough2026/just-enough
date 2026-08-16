@@ -55,11 +55,10 @@ function renderBar(){
 }
 function buildOrder(){
   const name=$("#customer-name").value.trim()||"未填";
-  const phone=$("#customer-phone").value.trim()||"未填";
   const date=$("#pickup-date").value||"未填";
   const time=$("#pickup-time").value||"未填";
   const note=$("#note").value.trim()||"無";
-  const lines=[`【${store.name} ${store.englishName}】`,"",`取餐人：${name}`,`電話：${phone}`,`取餐日期：${date}`,`取餐時間：${time}`,""];
+  const lines=[`【${store.name} ${store.englishName}】`,"",`取餐人：${name}`,`取餐日期：${date}`,`取餐時間：${time}`,""];
   selected().forEach(p=>lines.push(`${p.name} × ${state[p.id].qty}　${money(p.price*state[p.id].qty)}`));
   lines.push("",`總金額：${money(total())}`,"",`備註：${note}`);
   return lines.join("\n");
@@ -74,6 +73,5 @@ function closeSheet(){ $("#cart-sheet").classList.remove("open"); $("#cart-sheet
 async function copy(text){ try{await navigator.clipboard.writeText(text);return true}catch{const ta=document.createElement("textarea");ta.value=text;document.body.appendChild(ta);ta.select();const ok=document.execCommand("copy");ta.remove();return ok} }
 $("#open-cart").onclick=openSheet; $("#close-cart").onclick=closeSheet;
 $("#cart-sheet").onclick=e=>{if(e.target===$("#cart-sheet"))closeSheet()};
-$("#copy-order").onclick=async()=>{if(!selected().length)return alert("請先選擇餐點");await copy(buildOrder());alert("訂單文字已複製")};
 $("#send-line").onclick=async()=>{if(!selected().length)return alert("請先選擇餐點");const text=buildOrder();await copy(text);location.href=`https://line.me/R/msg/text/?${encodeURIComponent(text)}`};
 initializeStore(); renderProducts();
