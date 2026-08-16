@@ -15,16 +15,23 @@ window.STORE_CONFIG = {
     uberEats: ""
   },
   products: [
-    { id:"baqi-chicken-noodles", name:"霸氣雞腿涼粉", desc:"雞腿搭配涼粉，份量霸氣", price:120, image:"baqi_chicken_noodles.jpg?v=32", badge:"新品", soldOut:false, stock:null },
-    { id:"kou", name:"口水雞（四分之一）", desc:"酸、辣、香，層次豐富", price:180, image:"spicy_chicken.jpg?v=31", badge:"人氣", soldOut:false, stock:null },
-    { id:"oil-q", name:"油雞（四分之一）", desc:"鮮嫩多汁，清爽不膩", price:150, image:"oil_quarter.jpg?v=31", badge:"", soldOut:false, stock:null },
-    { id:"oil-h", name:"油雞（半隻）", desc:"適合多人分享", price:250, image:"oil_half.jpg?v=31", badge:"", soldOut:false, stock:null },
-    { id:"oil-rice", name:"油雞腿飯", desc:"每日限量，僅提供預約", price:110, image:"oil_rice.jpg?v=31", badge:"新品", soldOut:false, stock:null },
-    { id:"hainan-spicy", name:"海南雞腿飯（辣）", desc:"每日限量，獨立數量", price:110, image:"hainan_rice.jpg?v=31", badge:"新品", soldOut:false, stock:null },
-    { id:"hainan-mild", name:"海南雞腿飯（不辣）", desc:"每日限量，獨立數量", price:110, image:"hainan_rice.jpg?v=31", badge:"新品", soldOut:false, stock:null },
-    { id:"noodle-s-spicy", name:"小涼粉（酸辣）", desc:"爽口彈滑，獨立數量", price:60, image:"noodles_small.jpg?v=31", badge:"", soldOut:false, stock:null },
-    { id:"noodle-s-sesame", name:"小涼粉（胡麻）", desc:"香濃胡麻，獨立數量", price:60, image:"noodles_small.jpg?v=31", badge:"", soldOut:false, stock:null },
-    { id:"noodle-l-spicy", name:"大涼粉（酸辣）", desc:"爽口彈滑，獨立數量", price:100, image:"noodles_large.jpg?v=31", badge:"", soldOut:false, stock:null },
-    { id:"noodle-l-sesame", name:"大涼粉（胡麻）", desc:"香濃胡麻，獨立數量", price:100, image:"noodles_large.jpg?v=31", badge:"", soldOut:false, stock:null }
+    { id:"baqi-spicy", name:"霸氣雞腿涼粉（酸辣）", desc:"雞腿搭配酸辣涼粉，份量霸氣", price:120, image:"baqi_chicken_noodles.jpg?v=33", badge:"新品", soldOut:false, stock:null },
+    { id:"baqi-sesame", name:"霸氣雞腿涼粉（胡麻）", desc:"雞腿搭配胡麻涼粉，香濃順口", price:120, image:"baqi_chicken_noodles.jpg?v=33", badge:"新品", soldOut:false, stock:null },
+    { id:"baqi-mixed", name:"霸氣雞腿涼粉（綜合）", desc:"雞腿搭配綜合醬涼粉，雙重風味", price:120, image:"baqi_chicken_noodles.jpg?v=33", badge:"新品", soldOut:false, stock:null },
+
+    { id:"kou", name:"口水雞（四分之一）", desc:"酸、辣、香，層次豐富", price:180, image:"spicy_chicken.jpg?v=33", badge:"人氣", soldOut:false, stock:null },
+    { id:"oil-q", name:"油雞（四分之一）", desc:"鮮嫩多汁，清爽不膩", price:150, image:"oil_quarter.jpg?v=33", badge:"", soldOut:false, stock:null },
+    { id:"oil-h", name:"油雞（半隻）", desc:"適合多人分享", price:250, image:"oil_half.jpg?v=33", badge:"", soldOut:false, stock:null },
+    { id:"oil-rice", name:"油雞腿飯", desc:"每日限量，僅提供預約", price:110, image:"oil_rice.jpg?v=33", badge:"新品", soldOut:false, stock:null },
+    { id:"hainan-spicy", name:"海南雞腿飯（辣）", desc:"每日限量，獨立數量", price:110, image:"hainan_rice.jpg?v=33", badge:"新品", soldOut:false, stock:null },
+    { id:"hainan-mild", name:"海南雞腿飯（不辣）", desc:"每日限量，獨立數量", price:110, image:"hainan_rice.jpg?v=33", badge:"新品", soldOut:false, stock:null },
+
+    { id:"noodle-s-spicy", name:"小涼粉（酸辣）", desc:"酸辣開胃，爽口彈滑", price:60, image:"noodles_small.jpg?v=33", badge:"", soldOut:false, stock:null },
+    { id:"noodle-s-sesame", name:"小涼粉（胡麻）", desc:"濃郁不辣，香醇順口", price:60, image:"noodles_small.jpg?v=33", badge:"", soldOut:false, stock:null },
+    { id:"noodle-s-mixed", name:"小涼粉（綜合）", desc:"酸辣＋胡麻，雙重風味", price:60, image:"noodles_small.jpg?v=33", badge:"", soldOut:false, stock:null },
+
+    { id:"noodle-l-spicy", name:"大涼粉（酸辣）", desc:"酸辣開胃，爽口彈滑", price:100, image:"noodles_large.jpg?v=33", badge:"", soldOut:false, stock:null },
+    { id:"noodle-l-sesame", name:"大涼粉（胡麻）", desc:"濃郁不辣，香醇順口", price:100, image:"noodles_large.jpg?v=33", badge:"", soldOut:false, stock:null },
+    { id:"noodle-l-mixed", name:"大涼粉（綜合）", desc:"酸辣＋胡麻，雙重風味", price:100, image:"noodles_large.jpg?v=33", badge:"", soldOut:false, stock:null }
   ]
 };

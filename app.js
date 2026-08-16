@@ -1,5 +1,5 @@
 const {store, products} = window.STORE_CONFIG;
-const KEY = "justEnoughCartV3";
+const KEY = "justEnoughCartV33";
 const state = JSON.parse(localStorage.getItem(KEY) || "{}");
 const $ = s => document.querySelector(s);
 const money = n => `$${n.toLocaleString("zh-TW")}`;
@@ -58,9 +58,10 @@ function buildOrder(){
   const date=$("#pickup-date").value||"未填";
   const time=$("#pickup-time").value||"未填";
   const note=$("#note").value.trim()||"無";
+  const utensils=$("#utensils").value;
   const lines=[`【${store.name} ${store.englishName}】`,"",`取餐人：${name}`,`取餐日期：${date}`,`取餐時間：${time}`,""];
   selected().forEach(p=>lines.push(`${p.name} × ${state[p.id].qty}　${money(p.price*state[p.id].qty)}`));
-  lines.push("",`總金額：${money(total())}`,"",`備註：${note}`);
+  lines.push("",`總金額：${money(total())}`,"",`餐具：${utensils}`,`備註：${note}`);
   return lines.join("\n");
 }
 function openSheet(){
