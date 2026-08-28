@@ -78,6 +78,7 @@ function orderText(){
 }
 $('#open-cart').addEventListener('click',()=>{$('#cart-sheet').classList.add('open');$('#cart-sheet').setAttribute('aria-hidden','false');render()});
 $('#close-cart').addEventListener('click',()=>{$('#cart-sheet').classList.remove('open');$('#cart-sheet').setAttribute('aria-hidden','true')});
+$('#back-order').addEventListener('click',()=>{$('#close-cart').click()});
 $('#cart-sheet').addEventListener('click',e=>{if(e.target.id==='cart-sheet')$('#close-cart').click()});
 document.querySelectorAll('.utensils button').forEach((b,i)=>{
   if(i===0)b.classList.add('selected');
