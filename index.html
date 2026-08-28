@@ -6,9 +6,9 @@
   <meta name="theme-color" content="#315746">
   <meta name="description" content="食材有限 Just Enough 線上點餐">
   <title>食材有限 Just Enough｜線上點餐</title>
-  <link rel="stylesheet" href="styles.css?v=5.0.0">
-  <script defer src="config.js?v=5.0.0"></script>
-  <script defer src="app.js?v=5.0.0"></script>
+  <link rel="stylesheet" href="styles.css?v=6.0.0">
+  <script defer src="config.js?v=6.0.0"></script>
+  <script defer src="app.js?v=6.0.0"></script>
 </head>
 <body>
 <header class="topbar">
@@ -18,7 +18,7 @@
 
 <main>
   <section class="intro card">
-    <h1>線上點餐</h1>
+    <h1>今天想吃什麼？</h1>
     <p id="announcement" class="announcement"></p>
     <div class="steps">
       <span><b>1</b> 選餐點</span><span><b>2</b> 填取餐資料</span><span><b>3</b> 查看訂單</span><span><b>4</b> 傳到 LINE</span>
@@ -36,7 +36,7 @@
   <section id="menu" class="section-block">
     <div class="section-heading">
       <div><span class="step-badge">步驟 1</span><h2>選擇餐點</h2></div>
-      <p>先選口味，再按「＋」加入份數。</p>
+      <p>① 選口味　② 按＋選數量</p>
     </div>
     <div id="product-list" class="products"></div>
     <p class="food-note">圖片僅供參考，請以實品為主。部分餐點含花生、芝麻，堅果過敏者請留意。</p>
@@ -45,7 +45,7 @@
   <section class="order-form card section-block">
     <div class="section-heading">
       <div><span class="step-badge">步驟 2</span><h2>填寫取餐資料</h2></div>
-      <p>方便店家確認您的訂單。</p>
+      <p>姓名、電話、日期、時間請填寫完整。</p>
     </div>
     <div class="form-grid">
       <label><span>取餐人姓名</span><input id="customer-name" autocomplete="name" placeholder="請輸入姓名"></label>
