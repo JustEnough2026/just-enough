@@ -5,7 +5,6 @@ let utensil='⭕️ 餐具';
 const $=s=>document.querySelector(s);
 const money=n=>`$${Number(n).toLocaleString('zh-TW')}`;
 
-$('#announcement').textContent=store.announcement;
 $('#open-status').textContent=store.open?`營業中｜${store.hours}`:'今日店休';
 [['line-link',store.lineCommunity],['map-link',store.googleMaps],['foodpanda-link',store.foodpanda],['uber-link',store.uberEats]].forEach(([id,u])=>{
   const e=$('#'+id); if(!e)return; if(u)e.href=u; else e.style.display='none';
@@ -67,6 +66,6 @@ document.querySelectorAll('.utensils button').forEach((b,i)=>{
     b.classList.add('selected');
   });
 });
-async function copy(){try{await navigator.clipboard.writeText(orderText());alert('訂單已複製')}catch{prompt('請複製以下訂單：',orderText())}}
-$('#send-line').addEventListener('click',async()=>{await copy();window.open(store.lineCommunity,'_blank')});
+async function sendToLine(){try{await navigator.clipboard.writeText(orderText())}catch{} window.open(store.lineCommunity,'_blank')}
+$('#send-line').addEventListener('click',sendToLine);
 render();
