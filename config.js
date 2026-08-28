@@ -6,8 +6,6 @@ window.STORE_CONFIG = {
     announcement: "餐點每日限量，建議先完成 LINE 預訂。",
     open: true,
     hours: "11:00–19:30（售完為止）",
-    phone: "0981164258",
-    phoneDisplay: "0981-164-258",
     address: "台南市永康區正強街200號（米里旁）",
     lineCommunity: "https://line.me/ti/g2/SHxp9hx5oUJKcqH6_zmynMuAqAprnRXjUx3apA?utm_source=invitation&utm_medium=link_copy&utm_campaign=default",
     googleMaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("台南市永康區正強街200號"),

@@ -7,13 +7,9 @@ const money=n=>`$${Number(n).toLocaleString('zh-TW')}`;
 
 $('#announcement').textContent=store.announcement;
 $('#open-status').textContent=store.open?`營業中｜${store.hours}`:'今日店休';
-$('#quick-phone').textContent=store.phoneDisplay;
 [['line-link',store.lineCommunity],['map-link',store.googleMaps],['foodpanda-link',store.foodpanda],['uber-link',store.uberEats]].forEach(([id,u])=>{
   const e=$('#'+id); if(!e)return; if(u)e.href=u; else e.style.display='none';
 });
-$('#phone-link').href=`tel:${store.phone}`;
-$('#info-phone').textContent=store.phoneDisplay;
-$('#info-phone').href=`tel:${store.phone}`;
 $('#info-address').textContent=store.address;
 
 const list=$('#product-list');
@@ -55,11 +51,10 @@ function render(){
 function orderText(){
   const[c,t]=totals();
   const name=$('#customer-name').value.trim();
-  const phone=$('#customer-phone').value.trim();
   const date=$('#pickup-date').value;
   const time=$('#pickup-time').value;
   const note=$('#note').value.trim();
-  return `【食材有限 訂單】\n${products.filter(p=>state[p.id]>0).map(p=>`${p.name}${selections[p.id]?`（${selections[p.id]}）`:''} × ${state[p.id]} = ${money(state[p.id]*p.price)}`).join('\n')}\n總計：${money(t)}（${c}份）\n取餐人：${name||'未填'}\n電話：${phone||'未填'}\n取餐：${date||'未填'} ${time||''}\n餐具：${utensil}\n備註：${note||'無'}\nLINE 密碼：0000`;
+  return `【食材有限 訂單】\n${products.filter(p=>state[p.id]>0).map(p=>`${p.name}${selections[p.id]?`（${selections[p.id]}）`:''} × ${state[p.id]} = ${money(state[p.id]*p.price)}`).join('\n')}\n總計：${money(t)}（${c}份）\n取餐人：${name||'未填'}\n取餐：${date||'未填'} ${time||''}\n餐具：${utensil}\n備註：${note||'無'}\nLINE 密碼：0000`;
 }
 $('#open-cart').addEventListener('click',()=>{$('#cart-sheet').classList.add('open');$('#cart-sheet').setAttribute('aria-hidden','false');render()});
 $('#close-cart').addEventListener('click',()=>{$('#cart-sheet').classList.remove('open');$('#cart-sheet').setAttribute('aria-hidden','true')});
@@ -73,6 +68,5 @@ document.querySelectorAll('.utensils button').forEach((b,i)=>{
   });
 });
 async function copy(){try{await navigator.clipboard.writeText(orderText());alert('訂單已複製')}catch{prompt('請複製以下訂單：',orderText())}}
-$('#copy-order').addEventListener('click',copy);
 $('#send-line').addEventListener('click',async()=>{await copy();window.open(store.lineCommunity,'_blank')});
 render();
