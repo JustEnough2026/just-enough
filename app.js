@@ -98,35 +98,11 @@ document.querySelectorAll('.utensils button').forEach((b,i)=>{
   if(i===0)b.classList.add('selected');
   b.addEventListener('click',()=>{utensil=b.dataset.utensil;document.querySelectorAll('.utensils button').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');});
 });
-function legacyCopy(text){
-  const ta=document.createElement('textarea');
-  ta.value=text;
-  ta.setAttribute('readonly','');
-  ta.style.position='fixed';
-  ta.style.left='-9999px';
-  ta.style.top='0';
-  document.body.appendChild(ta);
-  ta.focus();
-  ta.select();
-  ta.setSelectionRange(0,ta.value.length);
-  let ok=false;
-  try{ok=document.execCommand('copy');}catch(e){}
-  document.body.removeChild(ta);
-  return ok;
-}
-async function copyOrder(text){
-  if(navigator.clipboard && window.isSecureContext){
-    try{await navigator.clipboard.writeText(text);return true;}catch(e){}
-  }
-  return legacyCopy(text);
-}
-async function sendToLine(){
+function sendToLine(){
   const text=orderText();
-  const copied=await copyOrder(text);
-  if(!copied){
-    window.prompt('請長按複製以下訂單，再貼到 LINE：',text);
-  }
-  window.location.href=store.lineCommunity;
+  // Use LINE's official text-share URL so iPhone Safari does not depend on clipboard permission.
+  const shareUrl='https://line.me/R/msg/text/?'+encodeURIComponent(text);
+  window.location.href=shareUrl;
 }
 $('#send-line').addEventListener('click',sendToLine);
 render();
