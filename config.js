@@ -14,8 +14,8 @@ window.STORE_CONFIG = {
   },
   products: [
     {id:"kou",name:"口水雞（辣）",desc:"",price:180,image:"spicy_chicken.jpg",badge:"",soldOut:false},
-    {id:"oil-q",name:"油雞腿（1/4隻）",desc:"",price:150,image:"oil_quarter.jpg",badge:"",soldOut:false},
-    {id:"oil-h",name:"油雞腿（半隻）",desc:"",price:250,image:"oil_half.jpg",badge:"",soldOut:false},
+    {id:"oil-q",name:"油雞（四分之一）",desc:"",price:150,image:"oil_quarter.jpg",badge:"",soldOut:false},
+    {id:"oil-h",name:"油雞（半雞）",desc:"",price:250,image:"oil_half.jpg",badge:"",soldOut:false},
     {id:"hainan",name:"海南雞腿飯",desc:"",price:110,image:"hainan_rice.jpg",options:["辣","不辣"],badge:"",soldOut:false},
     {id:"oil-rice",name:"油雞腿飯",desc:"",price:110,image:"oil_rice.jpg",options:["辣","不辣"],badge:"",soldOut:false},
     {id:"boss",name:"霸氣雞腿涼粉",desc:"",price:120,image:"boss_noodles.jpg",options:["酸辣","胡麻","綜合"],badge:"新品",soldOut:false},
