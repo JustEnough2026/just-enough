@@ -7,3 +7,9 @@
 .flavor-counts{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.flavor-counts span{font-size:13px;background:#f2f5f3;border-radius:999px;padding:4px 8px;color:#315746;font-weight:700}
 
 .hero{margin:0 0 14px;border-radius:16px;overflow:hidden;background:#fff}.hero img{display:block;width:100%;height:auto;max-height:430px;object-fit:cover}.status{white-space:nowrap}@media(max-width:520px){.topbar{gap:10px}.brand strong{font-size:19px}.status{font-size:13px}.hero{border-radius:12px;margin-bottom:10px}}
+
+/* v15 menu categories */
+#product-list{display:block}
+.menu-category{margin:0 0 28px}
+.category-title{margin:0 0 12px;padding:10px 14px;border-left:5px solid #315746;background:#eef4f0;border-radius:10px;font-size:1.25rem;color:#234638}
+.category-products{display:grid}

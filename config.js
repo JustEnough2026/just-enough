@@ -22,6 +22,8 @@ window.STORE_CONFIG = {
     {id:"seafood-l",name:"海鮮涼粉（大）",desc:"",price:110,image:"seafood_large.jpg",options:["酸辣","胡麻","綜合"],badge:"新品",soldOut:false},
     {id:"seafood-s",name:"海鮮涼粉（小）",desc:"",price:70,image:"seafood_small.jpg",options:["酸辣","胡麻","綜合"],badge:"新品",soldOut:false},
     {id:"noodle-l",name:"大涼粉",desc:"",price:100,image:"noodles_large.jpg",options:["酸辣","胡麻","綜合"],badge:"",soldOut:false},
-    {id:"noodle-s",name:"小涼粉",desc:"",price:60,image:"noodles_small.jpg",options:["酸辣","胡麻","綜合"],badge:"",soldOut:false}
+    {id:"noodle-s",name:"小涼粉",desc:"",price:60,image:"noodles_small.jpg",options:["酸辣","胡麻","綜合"],badge:"",soldOut:false},
+    {id:"braised-pork-rice",name:"肉燥飯便當",desc:"",price:70,image:"braised_pork_rice.jpg",badge:"新品",soldOut:false},
+    {id:"shredded-chicken-rice",name:"雞絲便當",desc:"",price:80,image:"shredded_chicken_rice.jpg",badge:"新品",soldOut:false}
   ]
 };

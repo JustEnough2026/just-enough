@@ -13,6 +13,20 @@ $('#open-status').textContent=store.open?store.hours:'今日店休';
 $('#info-address').textContent=store.address;
 
 const list=$('#product-list');
+const categoryOrder=[
+  ['雞肉類',['kou','oil-q','oil-h']],
+  ['涼粉類',['boss','seafood-l','seafood-s','noodle-l','noodle-s']],
+  ['便當類',['hainan','oil-rice','braised-pork-rice','shredded-chicken-rice']]
+];
+const categoryById=Object.fromEntries(categoryOrder.flatMap(([name,ids])=>ids.map(id=>[id,name])));
+const categoryLists={};
+categoryOrder.forEach(([name])=>{
+  const section=document.createElement('section');
+  section.className='menu-category';
+  section.innerHTML=`<h3 class="category-title">${name}</h3><div class="products category-products"></div>`;
+  list.appendChild(section);
+  categoryLists[name]=section.querySelector('.category-products');
+});
 products.forEach(p=>{
   selections[p.id]=p.options?.[0]||'';
   if(p.options) p.options.forEach(opt=>state[key(p,opt)]=0); else state[key(p)]=0;
@@ -49,7 +63,7 @@ products.forEach(p=>{
     refreshCard(); render();
   }));
   refreshCard();
-  list.appendChild(d);
+  (categoryLists[categoryById[p.id]]||list).appendChild(d);
 });
 
 function lines(){
