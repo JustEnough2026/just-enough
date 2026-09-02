@@ -50,7 +50,57 @@ refreshLuwei();
 function lines(){const out=[];products.forEach(p=>{if(p.options)p.options.forEach(opt=>{const q=state[key(p,opt)]||0;if(q>0)out.push({name:p.name,opt,q,price:p.price});});else{const q=state[key(p)]||0;if(q>0)out.push({name:p.name,opt:'',q,price:p.price});}});luwei.groups.forEach(g=>g.items.forEach(item=>luwei.spice.forEach(spice=>{const q=state[luKey(item,spice)]||0;if(q>0)out.push({name:item.name,opt:spice,q,price:item.price,luwei:true});})));return out;}
 function totals(){return lines().reduce(([c,t],x)=>[c+x.q,t+x.q*x.price],[0,0]);}
 function render(){const[c,t]=totals();$('#cart-count').textContent=`${c} 份`;$('#cart-total').textContent=money(t);$('#sheet-total').textContent=money(t);$('#cart-items').innerHTML=lines().map(x=>`<div class="cart-item"><b>${x.name}${x.opt?`（${x.opt}）`:''}</b><span>${x.q} 份 × ${money(x.price)}　＝ ${money(x.q*x.price)}</span></div>`).join('')||'<p>尚未選擇餐點，請先回到菜單按「＋」。</p>';}
-function orderText(){const[c,t]=totals(),name=$('#customer-name').value.trim(),rawDate=$('#pickup-date').value,time=$('#pickup-time').value,note=$('#note').value.trim();const date=rawDate?`${Number(rawDate.slice(5,7))}/${Number(rawDate.slice(8,10))}`:'';const header=[name||'未填',date||'未填',time||'未填'].join(' ');const items=lines().map(x=>`${x.name}${x.opt?`（${x.opt}）`:''} ${money(x.price)} ×${x.q}`).join('\n');const parts=[header,items,`共 ${c} 份｜總計 ${money(t)}`,utensil];if(note)parts.push(`備註：${note}`);return parts.join('\n');}
+function orderText(){
+  const name=$('#customer-name').value.trim(),rawDate=$('#pickup-date').value,time=$('#pickup-time').value,note=$('#note').value.trim();
+  const date=rawDate?`${Number(rawDate.slice(5,7))}/${Number(rawDate.slice(8,10))}`:'';
+  const header=[name||'未填',date||'未填',time||'未填'].join(' ');
+  const parts=[header];
+  let totalMoney=0, totalServings=0;
+
+  // 一般餐點：照原本簡易格式列出
+  products.forEach(p=>{
+    if(p.options){
+      p.options.forEach(opt=>{
+        const q=state[key(p,opt)]||0;
+        if(q>0){
+          parts.push(`${p.name}（${opt}） ${money(p.price)} ×${q}`);
+          totalMoney+=q*p.price; totalServings+=q;
+        }
+      });
+    }else{
+      const q=state[key(p)]||0;
+      if(q>0){
+        parts.push(`${p.name} ${money(p.price)} ×${q}`);
+        totalMoney+=q*p.price; totalServings+=q;
+      }
+    }
+  });
+
+  // 滷味：依辣度分組，每個辣度視為 1 份訂單
+  const spiceGroups=[];
+  luwei.spice.forEach(spice=>{
+    const group=[]; let itemCount=0, subtotal=0;
+    luwei.groups.forEach(g=>g.items.forEach(item=>{
+      const q=state[luKey(item,spice)]||0;
+      if(q>0){
+        group.push(`${item.name} ${money(item.price)} ×${q}`);
+        itemCount+=q; subtotal+=q*item.price;
+      }
+    }));
+    if(group.length){
+      spiceGroups.push({spice,group,itemCount,subtotal});
+      totalMoney+=subtotal; totalServings+=1;
+    }
+  });
+
+  spiceGroups.forEach(({spice,group,itemCount,subtotal})=>{
+    parts.push('',`${spice}：`,...group,`${itemCount}項｜${money(subtotal)}`);
+  });
+
+  parts.push('',`共 ${totalServings}份｜總計 ${money(totalMoney)}`,utensil);
+  if(note)parts.push(`備註：${note}`);
+  return parts.join('\n');
+}
 $('#open-cart').addEventListener('click',()=>{$('#cart-sheet').classList.add('open');$('#cart-sheet').setAttribute('aria-hidden','false');render();});
 $('#close-cart').addEventListener('click',()=>{$('#cart-sheet').classList.remove('open');$('#cart-sheet').setAttribute('aria-hidden','true');});
 $('#back-order').addEventListener('click',()=>$('#close-cart').click());
