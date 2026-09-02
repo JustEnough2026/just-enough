@@ -15,3 +15,29 @@
 .category-products{display:grid}
 /* v22 飯類、便當時段、晚間滷味 */
 .category-title-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.category-title-row .category-title{margin:0;flex:1}.hours-tag{white-space:nowrap;background:#315746;color:#fff;border-radius:999px;padding:6px 10px;font-size:13px;font-weight:900}.product.no-image{grid-template-columns:1fr;min-height:130px}.product.no-image .product-content{min-height:130px}.luwei-box{background:#fff;border:1px solid #dfe6e1;border-radius:14px;padding:16px}.luwei-spice-title{font-weight:900;margin-bottom:9px}.luwei-spice{margin-bottom:18px}.luwei-group{border-top:1px solid #e2e8e4;padding-top:14px;margin-top:14px}.luwei-group h4{margin:0 0 8px;font-size:18px;color:#315746}.luwei-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.luwei-item{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid #e1e7e3;border-radius:10px;padding:10px}.luwei-item>div:first-child{display:flex;flex-direction:column;gap:2px}.luwei-item>div:first-child>span{color:#315746;font-weight:900}.lu-selected{color:#7a877f;min-height:16px}.luwei-item .qty button{width:34px;height:34px;font-size:20px}.luwei-item .qty{gap:7px}@media(max-width:600px){.category-title-row{align-items:flex-start}.hours-tag{font-size:12px}.luwei-items{grid-template-columns:1fr}.luwei-box{padding:12px}}
+
+.order-preview{margin:0;padding:12px 0;white-space:pre-wrap;word-break:break-word;font:inherit;line-height:1.7;color:var(--text)}
+
+
+/* v25 滷味：與涼粉相同的卡片式選項操作 */
+.luwei-card{display:block;min-height:0;overflow:visible}
+.luwei-card .product-content{padding:16px;min-height:0}
+.luwei-card .product-head{margin-bottom:2px}
+.luwei-card .luwei-spice{margin-bottom:0}
+.luwei-current{display:flex;align-items:center;gap:9px;margin:16px 0 6px;color:var(--muted);font-weight:800}
+.luwei-current strong{background:#f2f5f3;color:var(--green);border-radius:999px;padding:5px 10px}
+.luwei-item-title{font-size:16px;font-weight:900;color:var(--muted);margin:14px 0 4px}
+.luwei-card .luwei-group{margin-top:12px;padding-top:12px}
+.luwei-card .luwei-group h4{font-size:15px;margin-bottom:8px;color:var(--muted)}
+.luwei-card .luwei-items{grid-template-columns:repeat(2,minmax(0,1fr))}
+.luwei-card .luwei-item{background:#fff;padding:10px 11px}
+.luwei-card .luwei-item-name{display:flex;flex-direction:column;gap:2px}
+.luwei-card .luwei-item-name span{color:var(--green);font-weight:900}
+.luwei-card .luwei-item .qty button{width:38px;height:38px;border-radius:10px;font-size:22px}
+.luwei-card .luwei-item .qty b{font-size:19px}
+.luwei-selected-summary{margin-top:14px}
+@media(max-width:600px){
+  .luwei-card .product-content{padding:12px}
+  .luwei-card .luwei-items{grid-template-columns:1fr}
+  .luwei-card .luwei-item{padding:9px 10px}
+}

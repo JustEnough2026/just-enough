@@ -37,54 +37,124 @@ function productCard(p){
 }
 products.forEach(p=>categoryLists[p.category].appendChild(productCard(p)));
 
-// 滷味：先選辣度，再選品項
+// 滷味：做成和涼粉相同的「選項在卡片裡」操作
 const luSection=document.createElement('section'); luSection.className='menu-category luwei-section';
-luSection.innerHTML=`<div class="category-title-row"><h3 class="category-title">🌙 滷味類</h3><span class="hours-tag">${luwei.hours}</span></div><div class="luwei-box"><div class="luwei-spice-title">先選辣度</div><div class="opts luwei-spice">${luwei.spice.map((s,i)=>`<button type="button" class="opt ${i===0?'selected':''}" data-spice="${s}">${s}</button>`).join('')}</div><div id="luwei-groups"></div></div>`;
+luSection.innerHTML=`
+  <div class="category-title-row">
+    <h3 class="category-title">🌙 滷味類</h3>
+    <span class="hours-tag">${luwei.hours}</span>
+  </div>
+  <div class="product luwei-card no-image">
+    <div class="product-content">
+      <div class="product-head"><h3>滷味</h3></div>
+      <div class="option-label">辣度｜先選辣度，再選品項加入</div>
+      <div class="opts luwei-spice">
+        ${luwei.spice.map((spice,i)=>`<button type="button" class="opt ${i===0?'selected':''}" data-spice="${spice}">${spice}</button>`).join('')}
+      </div>
+      <div class="luwei-current"><span>目前辣度</span><strong id="luwei-current-spice">${luweiSpice}</strong></div>
+      <div class="luwei-item-title">品項</div>
+      <div id="luwei-groups"></div>
+      <div id="luwei-selected-summary" class="flavor-counts luwei-selected-summary"></div>
+    </div>
+  </div>`;
 list.appendChild(luSection);
-luSection.querySelectorAll('[data-spice]').forEach(b=>b.addEventListener('click',()=>{luweiSpice=b.dataset.spice;luSection.querySelectorAll('[data-spice]').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');refreshLuwei();}));
+
+luSection.querySelectorAll('[data-spice]').forEach(b=>b.addEventListener('click',()=>{
+  luweiSpice=b.dataset.spice;
+  luSection.querySelectorAll('[data-spice]').forEach(x=>x.classList.remove('selected'));
+  b.classList.add('selected');
+  refreshLuwei();
+}));
+
 const luGroups=$('#luwei-groups'), luRows=[];
-luwei.groups.forEach(g=>{const box=document.createElement('div');box.className='luwei-group';box.innerHTML=`<h4>${g.name}</h4><div class="luwei-items"></div>`;const wrap=box.querySelector('.luwei-items');g.items.forEach(item=>{luwei.spice.forEach(s=>state[luKey(item,s)]=0);const row=document.createElement('div');row.className='luwei-item';row.innerHTML=`<div><b>${item.name}</b><span>${money(item.price)}</span></div><div class="qty"><button type="button" data-d="-1">−</button><b class="luqty">0</b><button type="button" data-d="1">＋</button></div>`;row.querySelectorAll('.qty button').forEach(b=>b.addEventListener('click',()=>{const k=luKey(item,luweiSpice);state[k]=Math.max(0,(state[k]||0)+Number(b.dataset.d));refreshLuwei();render();}));wrap.appendChild(row);luRows.push({item,row});});luGroups.appendChild(box);});
-function refreshLuwei(){luRows.forEach(({item,row})=>{row.querySelector('.luqty').textContent=state[luKey(item,luweiSpice)]||0;const selected=luwei.spice.filter(s=>(state[luKey(item,s)]||0)>0).map(s=>`${s}×${state[luKey(item,s)]}`).join('、');let note=row.querySelector('.lu-selected');if(!note){note=document.createElement('small');note.className='lu-selected';row.firstElementChild.appendChild(note);}note.textContent=selected;});}
+luwei.groups.forEach(g=>{
+  const box=document.createElement('div');
+  box.className='luwei-group';
+  box.innerHTML=`<h4>${g.name}</h4><div class="luwei-items"></div>`;
+  const wrap=box.querySelector('.luwei-items');
+  g.items.forEach(item=>{
+    luwei.spice.forEach(spice=>state[luKey(item,spice)]=0);
+    const row=document.createElement('div');
+    row.className='luwei-item';
+    row.innerHTML=`
+      <div class="luwei-item-name"><b>${item.name}</b><span>${money(item.price)}</span></div>
+      <div class="qty">
+        <button type="button" data-d="-1">−</button>
+        <b class="luqty">0</b>
+        <button type="button" data-d="1">＋</button>
+      </div>`;
+    row.querySelectorAll('.qty button').forEach(b=>b.addEventListener('click',()=>{
+      const k=luKey(item,luweiSpice);
+      state[k]=Math.max(0,(state[k]||0)+Number(b.dataset.d));
+      refreshLuwei();
+      render();
+    }));
+    wrap.appendChild(row);
+    luRows.push({item,row});
+  });
+  luGroups.appendChild(box);
+});
+
+function refreshLuwei(){
+  $('#luwei-current-spice').textContent=luweiSpice;
+  luRows.forEach(({item,row})=>{
+    row.querySelector('.luqty').textContent=state[luKey(item,luweiSpice)]||0;
+  });
+  const summary=[];
+  luwei.spice.forEach(spice=>{
+    let count=0;
+    luwei.groups.forEach(g=>g.items.forEach(item=>count+=state[luKey(item,spice)]||0));
+    if(count>0) summary.push(`<span>${spice} × ${count}</span>`);
+  });
+  $('#luwei-selected-summary').innerHTML=summary.join('');
+}
 refreshLuwei();
 
 function lines(){const out=[];products.forEach(p=>{if(p.options)p.options.forEach(opt=>{const q=state[key(p,opt)]||0;if(q>0)out.push({name:p.name,opt,q,price:p.price});});else{const q=state[key(p)]||0;if(q>0)out.push({name:p.name,opt:'',q,price:p.price});}});luwei.groups.forEach(g=>g.items.forEach(item=>luwei.spice.forEach(spice=>{const q=state[luKey(item,spice)]||0;if(q>0)out.push({name:item.name,opt:spice,q,price:item.price,luwei:true});})));return out;}
 function totals(){return lines().reduce(([c,t],x)=>[c+x.q,t+x.q*x.price],[0,0]);}
-function render(){const[c,t]=totals();$('#cart-count').textContent=`${c} 份`;$('#cart-total').textContent=money(t);$('#sheet-total').textContent=money(t);$('#cart-items').innerHTML=lines().map(x=>`<div class="cart-item"><b>${x.name}${x.opt?`（${x.opt}）`:''}</b><span>${x.q} 份 × ${money(x.price)}　＝ ${money(x.q*x.price)}</span></div>`).join('')||'<p>尚未選擇餐點，請先回到菜單按「＋」。</p>';}
 function orderText(){
   const name=$('#customer-name').value.trim(),rawDate=$('#pickup-date').value,time=$('#pickup-time').value,note=$('#note').value.trim();
-  const date=rawDate?`${Number(rawDate.slice(5,7))}/${Number(rawDate.slice(8,10))}`:'';
-  const header=[name||'未填',date||'未填',time||'未填'].join(' ');
-  const parts=[header];
+  const parts=[
+    '【食材有限 Just Enough】',
+    '',
+    `取餐人：${name||'未填'}`,
+    `取餐日期：${rawDate||'未填'}`,
+    `取餐時間：${time||'未填'}`,
+    ''
+  ];
   let totalMoney=0, totalServings=0;
 
-  // 一般餐點：照原本簡易格式列出
+  // 一般餐點
   products.forEach(p=>{
     if(p.options){
       p.options.forEach(opt=>{
         const q=state[key(p,opt)]||0;
         if(q>0){
-          parts.push(`${p.name}（${opt}） ${money(p.price)} ×${q}`);
-          totalMoney+=q*p.price; totalServings+=q;
+          const subtotal=q*p.price;
+          parts.push(`${p.name}(${opt})*${q} ${money(subtotal)}`);
+          totalMoney+=subtotal; totalServings+=q;
         }
       });
     }else{
       const q=state[key(p)]||0;
       if(q>0){
-        parts.push(`${p.name} ${money(p.price)} ×${q}`);
-        totalMoney+=q*p.price; totalServings+=q;
+        const subtotal=q*p.price;
+        parts.push(`${p.name}*${q} ${money(subtotal)}`);
+        totalMoney+=subtotal; totalServings+=q;
       }
     }
   });
 
-  // 滷味：依辣度分組，每個辣度視為 1 份訂單
+  // 滷味：依辣度分組，每個辣度組合算 1 份
   const spiceGroups=[];
   luwei.spice.forEach(spice=>{
     const group=[]; let itemCount=0, subtotal=0;
     luwei.groups.forEach(g=>g.items.forEach(item=>{
       const q=state[luKey(item,spice)]||0;
       if(q>0){
-        group.push(`${item.name} ${money(item.price)} ×${q}`);
-        itemCount+=q; subtotal+=q*item.price;
+        const lineTotal=q*item.price;
+        group.push(`${item.name}*${q} ${money(lineTotal)}`);
+        itemCount+=q; subtotal+=lineTotal;
       }
     }));
     if(group.length){
@@ -97,9 +167,22 @@ function orderText(){
     parts.push('',`${spice}：`,...group,`${itemCount}項｜${money(subtotal)}`);
   });
 
-  parts.push('',`共 ${totalServings}份｜總計 ${money(totalMoney)}`,utensil);
-  if(note)parts.push(`備註：${note}`);
+  parts.push('',`共幾份：${totalServings}份`,`總金額：${money(totalMoney)}`,'',`餐具：${utensil.startsWith('⭕️')?'⭕️':'❌'}`,'',`備註：${note}`);
   return parts.join('\n');
+}
+
+function render(){
+  const[c,t]=totals();
+  $('#cart-count').textContent=`${c} 份`;
+  $('#cart-total').textContent=money(t);
+  const box=$('#cart-items');
+  if(box){
+    box.innerHTML='';
+    const pre=document.createElement('pre');
+    pre.className='order-preview';
+    pre.textContent=orderText();
+    box.appendChild(pre);
+  }
 }
 $('#open-cart').addEventListener('click',()=>{$('#cart-sheet').classList.add('open');$('#cart-sheet').setAttribute('aria-hidden','false');render();});
 $('#close-cart').addEventListener('click',()=>{$('#cart-sheet').classList.remove('open');$('#cart-sheet').setAttribute('aria-hidden','true');});
