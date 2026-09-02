@@ -37,136 +37,84 @@ function productCard(p){
 }
 products.forEach(p=>categoryLists[p.category].appendChild(productCard(p)));
 
-// 滷味：做成和涼粉相同的「選項在卡片裡」操作
+// 滷味：一份一張卡片；選辣度、品項，再用同一組 − / ＋ 調整數量
 const luSection=document.createElement('section'); luSection.className='menu-category luwei-section';
 luSection.innerHTML=`
   <div class="category-title-row">
     <h3 class="category-title">🌙 滷味類</h3>
     <span class="hours-tag">${luwei.hours}</span>
   </div>
-  <div class="product luwei-card no-image">
-    <div class="product-content">
-      <div class="product-head"><h3>滷味</h3></div>
-      <div class="option-label">辣度｜先選辣度，再選品項加入</div>
-      <div class="opts luwei-spice">
-        ${luwei.spice.map((spice,i)=>`<button type="button" class="opt ${i===0?'selected':''}" data-spice="${spice}">${spice}</button>`).join('')}
-      </div>
-      <div class="luwei-current"><span>目前辣度</span><strong id="luwei-current-spice">${luweiSpice}</strong></div>
-      <div class="luwei-item-title">品項</div>
-      <div id="luwei-groups"></div>
-      <div id="luwei-selected-summary" class="flavor-counts luwei-selected-summary"></div>
-    </div>
-  </div>`;
+  <div id="luwei-servings"></div>
+  <button type="button" id="add-luwei-serving" class="add-serving">＋ 新增一份</button>`;
 list.appendChild(luSection);
 
-luSection.querySelectorAll('[data-spice]').forEach(b=>b.addEventListener('click',()=>{
-  luweiSpice=b.dataset.spice;
-  luSection.querySelectorAll('[data-spice]').forEach(x=>x.classList.remove('selected'));
-  b.classList.add('selected');
-  refreshLuwei();
-}));
+let luweiServingSeq=0;
+const luweiServings=[];
+const allLuItems=luwei.groups.flatMap(g=>g.items.map(item=>({...item,group:g.name})));
 
-const luGroups=$('#luwei-groups'), luRows=[];
-luwei.groups.forEach(g=>{
-  const box=document.createElement('div');
-  box.className='luwei-group';
-  box.innerHTML=`<h4>${g.name}</h4><div class="luwei-items"></div>`;
-  const wrap=box.querySelector('.luwei-items');
-  g.items.forEach(item=>{
-    luwei.spice.forEach(spice=>state[luKey(item,spice)]=0);
-    const row=document.createElement('div');
-    row.className='luwei-item';
-    row.innerHTML=`
-      <div class="luwei-item-name"><b>${item.name}</b><span>${money(item.price)}</span></div>
-      <div class="qty">
-        <button type="button" data-d="-1">−</button>
-        <b class="luqty">0</b>
-        <button type="button" data-d="1">＋</button>
-      </div>`;
-    row.querySelectorAll('.qty button').forEach(b=>b.addEventListener('click',()=>{
-      const k=luKey(item,luweiSpice);
-      state[k]=Math.max(0,(state[k]||0)+Number(b.dataset.d));
-      refreshLuwei();
-      render();
-    }));
-    wrap.appendChild(row);
-    luRows.push({item,row});
-  });
-  luGroups.appendChild(box);
-});
-
-function refreshLuwei(){
-  $('#luwei-current-spice').textContent=luweiSpice;
-  luRows.forEach(({item,row})=>{
-    row.querySelector('.luqty').textContent=state[luKey(item,luweiSpice)]||0;
-  });
-  const summary=[];
-  luwei.spice.forEach(spice=>{
-    let count=0;
-    luwei.groups.forEach(g=>g.items.forEach(item=>count+=state[luKey(item,spice)]||0));
-    if(count>0) summary.push(`<span>${spice} × ${count}</span>`);
-  });
-  $('#luwei-selected-summary').innerHTML=summary.join('');
+function addLuweiServing(){
+  const serving={id:++luweiServingSeq,spice:luwei.spice[0],itemId:allLuItems[0].id,qty:{}};
+  allLuItems.forEach(item=>serving.qty[item.id]=0);
+  luweiServings.push(serving);
+  renderLuweiServings(); render();
 }
-refreshLuwei();
+function servingItem(serving){return allLuItems.find(x=>x.id===serving.itemId)||allLuItems[0];}
+function servingCount(serving){return Object.values(serving.qty).reduce((a,b)=>a+b,0);}
+function servingSubtotal(serving){return allLuItems.reduce((sum,item)=>sum+(serving.qty[item.id]||0)*item.price,0);}
+function renderLuweiServings(){
+  const wrap=$('#luwei-servings'); wrap.innerHTML='';
+  luweiServings.forEach((serving,index)=>{
+    const item=servingItem(serving);
+    const card=document.createElement('article'); card.className='product luwei-serving-card no-image';
+    card.innerHTML=`<div class="product-content">
+      <div class="product-head"><h3>滷味｜第 ${index+1} 份</h3>${luweiServings.length>1?'<button type="button" class="remove-serving">刪除這份</button>':''}</div>
+      <div class="option-label">辣度｜選擇這一份的辣度</div>
+      <div class="opts spice-options">${luwei.spice.map(x=>`<button type="button" class="opt ${x===serving.spice?'selected':''}" data-spice="${x}">${x}</button>`).join('')}</div>
+      <div class="option-label">品項｜先選品項，再按＋加入</div>
+      <div class="luwei-item-options">${luwei.groups.map(g=>`<div class="luwei-choice-group"><b>${g.name}</b><div class="opts">${g.items.map(x=>`<button type="button" class="opt item-opt ${x.id===serving.itemId?'selected':''}" data-item="${x.id}">${x.name} ${money(x.price)}</button>`).join('')}</div></div>`).join('')}</div>
+      <div class="qty-wrap luwei-main-qty"><span class="qty-label">${item.name} ${money(item.price)}</span><div class="qty"><button type="button" data-d="-1">−</button><b>${serving.qty[item.id]||0}</b><button type="button" data-d="1">＋</button></div></div>
+      <div class="flavor-counts serving-summary">${allLuItems.filter(x=>(serving.qty[x.id]||0)>0).map(x=>`<span>${x.name} × ${serving.qty[x.id]}</span>`).join('')}</div>
+      ${(servingCount(serving)>0)?`<div class="serving-total">${servingCount(serving)}項｜${money(servingSubtotal(serving))}</div>`:''}
+    </div>`;
+    card.querySelectorAll('[data-spice]').forEach(b=>b.addEventListener('click',()=>{serving.spice=b.dataset.spice;renderLuweiServings();render();}));
+    card.querySelectorAll('[data-item]').forEach(b=>b.addEventListener('click',()=>{serving.itemId=b.dataset.item;renderLuweiServings();}));
+    card.querySelectorAll('.luwei-main-qty .qty button').forEach(b=>b.addEventListener('click',()=>{const id=serving.itemId;serving.qty[id]=Math.max(0,(serving.qty[id]||0)+Number(b.dataset.d));renderLuweiServings();render();}));
+    const del=card.querySelector('.remove-serving'); if(del)del.addEventListener('click',()=>{luweiServings.splice(index,1);renderLuweiServings();render();});
+    wrap.appendChild(card);
+  });
+}
+$('#add-luwei-serving').addEventListener('click',addLuweiServing);
+addLuweiServing();
 
-function lines(){const out=[];products.forEach(p=>{if(p.options)p.options.forEach(opt=>{const q=state[key(p,opt)]||0;if(q>0)out.push({name:p.name,opt,q,price:p.price});});else{const q=state[key(p)]||0;if(q>0)out.push({name:p.name,opt:'',q,price:p.price});}});luwei.groups.forEach(g=>g.items.forEach(item=>luwei.spice.forEach(spice=>{const q=state[luKey(item,spice)]||0;if(q>0)out.push({name:item.name,opt:spice,q,price:item.price,luwei:true});})));return out;}
-function totals(){return lines().reduce(([c,t],x)=>[c+x.q,t+x.q*x.price],[0,0]);}
+function lines(){
+  const out=[];
+  products.forEach(p=>{if(p.options)p.options.forEach(opt=>{const q=state[key(p,opt)]||0;if(q>0)out.push({name:p.name,opt,q,price:p.price});});else{const q=state[key(p)]||0;if(q>0)out.push({name:p.name,opt:'',q,price:p.price});}});
+  luweiServings.forEach((serving,si)=>allLuItems.forEach(item=>{const q=serving.qty[item.id]||0;if(q>0)out.push({name:item.name,opt:serving.spice,q,price:item.price,luwei:true,serving:si+1});}));
+  return out;
+}
+function totals(){
+  let c=0,t=0;
+  products.forEach(p=>{if(p.options)p.options.forEach(opt=>{const q=state[key(p,opt)]||0;c+=q;t+=q*p.price;});else{const q=state[key(p)]||0;c+=q;t+=q*p.price;}});
+  luweiServings.forEach(s=>{if(servingCount(s)>0){c+=1;t+=servingSubtotal(s);}});
+  return[c,t];
+}
 function orderText(){
   const name=$('#customer-name').value.trim(),rawDate=$('#pickup-date').value,time=$('#pickup-time').value,note=$('#note').value.trim();
-  const parts=[
-    '【食材有限 Just Enough】',
-    '',
-    `取餐人：${name||'未填'}`,
-    `取餐日期：${rawDate||'未填'}`,
-    `取餐時間：${time||'未填'}`,
-    ''
-  ];
-  let totalMoney=0, totalServings=0;
-
-  // 一般餐點
+  const parts=['【食材有限 Just Enough】','',`取餐人：${name||'未填'}`,`取餐日期：${rawDate||'未填'}`,`取餐時間：${time||'未填'}`,''];
+  let totalMoney=0,totalServings=0;
   products.forEach(p=>{
-    if(p.options){
-      p.options.forEach(opt=>{
-        const q=state[key(p,opt)]||0;
-        if(q>0){
-          const subtotal=q*p.price;
-          parts.push(`${p.name}(${opt})*${q} ${money(subtotal)}`);
-          totalMoney+=subtotal; totalServings+=q;
-        }
-      });
-    }else{
-      const q=state[key(p)]||0;
-      if(q>0){
-        const subtotal=q*p.price;
-        parts.push(`${p.name}*${q} ${money(subtotal)}`);
-        totalMoney+=subtotal; totalServings+=q;
-      }
-    }
+    if(p.options)p.options.forEach(opt=>{const q=state[key(p,opt)]||0;if(q>0){const subtotal=q*p.price;parts.push(`${p.name}(${opt})*${q} ${money(subtotal)}`);totalMoney+=subtotal;totalServings+=q;}});
+    else{const q=state[key(p)]||0;if(q>0){const subtotal=q*p.price;parts.push(`${p.name}*${q} ${money(subtotal)}`);totalMoney+=subtotal;totalServings+=q;}}
   });
-
-  // 滷味：依辣度分組，每個辣度組合算 1 份
-  const spiceGroups=[];
-  luwei.spice.forEach(spice=>{
-    const group=[]; let itemCount=0, subtotal=0;
-    luwei.groups.forEach(g=>g.items.forEach(item=>{
-      const q=state[luKey(item,spice)]||0;
-      if(q>0){
-        const lineTotal=q*item.price;
-        group.push(`${item.name}*${q} ${money(lineTotal)}`);
-        itemCount+=q; subtotal+=lineTotal;
-      }
-    }));
-    if(group.length){
-      spiceGroups.push({spice,group,itemCount,subtotal});
-      totalMoney+=subtotal; totalServings+=1;
-    }
+  luweiServings.forEach((serving,index)=>{
+    const chosen=allLuItems.filter(item=>(serving.qty[item.id]||0)>0);
+    if(!chosen.length)return;
+    const subtotal=servingSubtotal(serving),itemCount=servingCount(serving);
+    parts.push('',`滷味第${index+1}份｜${serving.spice}：`);
+    chosen.forEach(item=>{const q=serving.qty[item.id];parts.push(`${item.name}*${q} ${money(q*item.price)}`);});
+    parts.push(`${itemCount}項｜${money(subtotal)}`);
+    totalMoney+=subtotal; totalServings+=1;
   });
-
-  spiceGroups.forEach(({spice,group,itemCount,subtotal})=>{
-    parts.push('',`${spice}：`,...group,`${itemCount}項｜${money(subtotal)}`);
-  });
-
   parts.push('',`共幾份：${totalServings}份`,`總金額：${money(totalMoney)}`,'',`餐具：${utensil.startsWith('⭕️')?'⭕️':'❌'}`,'',`備註：${note}`);
   return parts.join('\n');
 }

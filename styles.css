@@ -41,3 +41,7 @@
   .luwei-card .luwei-items{grid-template-columns:1fr}
   .luwei-card .luwei-item{padding:9px 10px}
 }
+
+
+/* v26 滷味：一份一張卡片，品項選項在上、數量控制在下 */
+#luwei-servings{display:grid;gap:12px}.luwei-serving-card{display:block;min-height:0;overflow:visible}.luwei-serving-card .product-content{min-height:0;padding:16px}.luwei-choice-group{margin-top:12px}.luwei-choice-group>b{display:block;margin-bottom:7px;color:var(--muted);font-size:14px}.luwei-item-options .item-opt{font-size:13px;padding:8px 10px}.luwei-main-qty{border-top:1px solid var(--line);margin-top:16px;padding-top:14px}.serving-summary{margin-top:10px}.serving-total{text-align:right;margin-top:10px;color:var(--green);font-weight:900}.add-serving{width:100%;margin-top:12px;border:1.5px dashed var(--green);background:#fff;color:var(--green);border-radius:12px;padding:14px;font-weight:900;font-size:16px;cursor:pointer}.remove-serving{border:0;background:#f5eeee;color:#a34a43;border-radius:8px;padding:7px 9px;font-weight:800;cursor:pointer;font-size:12px}.luwei-serving-card .product-head{align-items:center}@media(max-width:560px){.luwei-serving-card .product-content{padding:12px}.luwei-item-options .opts{gap:6px}.luwei-item-options .item-opt{padding:7px 8px}.luwei-main-qty .qty-label{max-width:55%}}
