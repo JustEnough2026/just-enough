@@ -85,10 +85,15 @@ function render(){
 function orderText(){
   const[c,t]=totals();
   const name=$('#customer-name').value.trim();
-  const date=$('#pickup-date').value;
+  const rawDate=$('#pickup-date').value;
   const time=$('#pickup-time').value;
   const note=$('#note').value.trim();
-  return `【食材有限 訂單】\n${lines().map(({p,opt,q})=>`${p.name}${opt?`（${opt}）`:''} × ${q} = ${money(q*p.price)}`).join('\n')}\n總計：${money(t)}（${c}份）\n取餐人：${name||'未填'}\n取餐：${date||'未填'} ${time||''}\n餐具：${utensil}\n備註：${note||'無'}\nLINE 密碼：0000`;
+  const date=rawDate ? `${Number(rawDate.slice(5,7))}/${Number(rawDate.slice(8,10))}` : '';
+  const header=[name||'未填',date||'未填',time||'未填'].join(' ');
+  const items=lines().map(({p,opt,q})=>`${p.name}${opt?`（${opt}）`:''} ${money(p.price)} ×${q}`).join('\n');
+  const parts=[header,items,`共 ${c} 份｜總計 ${money(t)}`,utensil];
+  if(note) parts.push(`備註：${note}`);
+  return parts.join('\n');
 }
 $('#open-cart').addEventListener('click',()=>{$('#cart-sheet').classList.add('open');$('#cart-sheet').setAttribute('aria-hidden','false');render()});
 $('#close-cart').addEventListener('click',()=>{$('#cart-sheet').classList.remove('open');$('#cart-sheet').setAttribute('aria-hidden','true')});
