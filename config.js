@@ -32,24 +32,29 @@ window.STORE_CONFIG = {
     hours:"16:00–19:30",
     spice:["不辣","小辣","中辣","大辣"],
     groups:[
-      {name:"滷味品項｜價格由高到低",items:[
-        {id:"lu-pig-intestine",name:"豬大腸",price:35},
-        {id:"lu-rice-sausage",name:"糯米腸",price:35},
-        {id:"lu-pork-slices",name:"豬肉片",price:35},
+      {name:"肉類",items:[
+        {id:"lu-pork-slices",name:"豬肉片",price:40},
+        {id:"lu-pig-intestine",name:"豬大腸",price:40},
         {id:"lu-pig-head",name:"豬頭皮",price:30},
         {id:"lu-pig-ear",name:"豬耳朵",price:30},
-        {id:"lu-king-oyster",name:"杏鮑菇",price:25},
-        {id:"lu-baby-cabbage",name:"娃娃菜",price:25},
-        {id:"lu-chicken-feet",name:"雞爪（4隻）",price:20},
-        {id:"lu-cabbage",name:"高麗菜",price:20},
-        {id:"lu-wood-ear",name:"木耳",price:20},
-        {id:"lu-peanut",name:"花生",price:20},
-        {id:"lu-sausage",name:"小熱狗（4條）",price:20},
-        {id:"lu-quail-egg",name:"小烏蛋（4顆）",price:20},
+        {id:"lu-chicken-feet",name:"雞爪（4隻）",price:25}
+      ]},
+      {name:"蔬菜類｜任挑兩樣 $50",items:[
+        {id:"lu-cabbage",name:"高麗菜",price:30},
+        {id:"lu-king-oyster",name:"杏鮑菇",price:30},
+        {id:"lu-baby-cabbage",name:"娃娃菜",price:30},
+        {id:"lu-wood-ear",name:"木耳",price:30},
+        {id:"lu-peanut",name:"花生",price:25}
+      ]},
+      {name:"副食類",items:[
+        {id:"lu-tofu",name:"豆乾",price:20},
+        {id:"lu-kelp",name:"海帶",price:20},
+        {id:"lu-tempura",name:"甜不辣",price:20},
         {id:"lu-blood-cake",name:"米血",price:20},
-        {id:"lu-tofu",name:"豆乾",price:15},
-        {id:"lu-tempura",name:"甜不辣",price:15},
-        {id:"lu-kelp",name:"海帶",price:15},
+        {id:"lu-sausage",name:"小熱狗（4條）",price:20},
+        {id:"lu-quail-egg",name:"鳥蛋（4顆）",price:20}
+      ]},
+      {name:"麵類",items:[
         {id:"lu-science-noodle",name:"科學麵",price:15},
         {id:"lu-steamed-noodle",name:"蒸煮麵",price:15},
         {id:"lu-pot-noodle",name:"鍋燒意麵",price:15}
