@@ -60,7 +60,20 @@ function addLuweiServing(){
 }
 function servingItem(serving){return allLuItems.find(x=>x.id===serving.itemId)||allLuItems[0];}
 function servingCount(serving){return Object.values(serving.qty).reduce((a,b)=>a+b,0);}
-function servingSubtotal(serving){return allLuItems.reduce((sum,item)=>sum+(serving.qty[item.id]||0)*item.price,0);}
+function vegetableDeal(serving){
+  const vegetableItems=allLuItems.filter(item=>item.group.startsWith('蔬菜類'));
+  const units=[];
+  vegetableItems.forEach(item=>{for(let i=0;i<(serving.qty[item.id]||0);i++)units.push(item.price);});
+  units.sort((a,b)=>b-a);
+  let regular=units.reduce((a,b)=>a+b,0), deal=0;
+  for(let i=0;i+1<units.length;i+=2)deal+=50;
+  if(units.length%2)deal+=units[units.length-1];
+  return {regular,deal,discount:regular-deal,count:units.length};
+}
+function servingSubtotal(serving){
+  const regular=allLuItems.reduce((sum,item)=>sum+(serving.qty[item.id]||0)*item.price,0);
+  return regular-vegetableDeal(serving).discount;
+}
 function renderLuweiServings(){
   const wrap=$('#luwei-servings'); wrap.innerHTML='';
   luweiServings.forEach((serving,index)=>{
@@ -109,9 +122,10 @@ function orderText(){
   luweiServings.forEach((serving,index)=>{
     const chosen=allLuItems.filter(item=>(serving.qty[item.id]||0)>0);
     if(!chosen.length)return;
-    const subtotal=servingSubtotal(serving),itemCount=servingCount(serving);
+    const subtotal=servingSubtotal(serving),itemCount=servingCount(serving),vegDeal=vegetableDeal(serving);
     parts.push('',`滷味第${index+1}份｜${serving.spice}：`);
     chosen.forEach(item=>{const q=serving.qty[item.id];parts.push(`${item.name}*${q} ${money(q*item.price)}`);});
+    if(vegDeal.discount>0)parts.push(`蔬菜任挑兩樣優惠 -${money(vegDeal.discount)}`);
     parts.push(`${itemCount}項｜${money(subtotal)}`);
     totalMoney+=subtotal; totalServings+=1;
   });
