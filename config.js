@@ -4,7 +4,7 @@ window.STORE_CONFIG = {
     englishName: "Just Enough",
     announcement: "餐點每日限量，建議先完成 LINE 預訂。",
     open: true,
-    hours: "11:00–21:00（依品項供應時段）",
+    hours: "11:00–19:30（售完為止）",
     address: "台南市永康區正強街200號（米里旁）",
     lineCommunity: "https://line.me/ti/g2/SHxp9hx5oUJKcqH6_zmynMuAqAprnRXjUx3apA?utm_source=invitation&utm_medium=link_copy&utm_campaign=default",
     googleMaps: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("台南市永康區正強街200號"),
@@ -29,32 +29,27 @@ window.STORE_CONFIG = {
   ],
   luwei: {
     title:"滷味類",
-    hours:"16:00–21:00",
+    hours:"16:00–19:30",
     spice:["不辣","小辣","中辣","大辣"],
     groups:[
-      {name:"肉類",items:[
+      {name:"滷味品項｜價格由高到低",items:[
         {id:"lu-pig-intestine",name:"豬大腸",price:35},
-        {id:"lu-pig-head",name:"豬頭皮",price:30},
         {id:"lu-rice-sausage",name:"糯米腸",price:35},
-        {id:"lu-chicken-feet",name:"雞爪（4隻）",price:20},
-        {id:"lu-pig-ear",name:"豬耳朵",price:30}
-      ]},
-      {name:"蔬菜類",items:[
-        {id:"lu-cabbage",name:"高麗菜",price:20},
-        {id:"lu-wood-ear",name:"木耳",price:20},
+        {id:"lu-pork-slices",name:"豬肉片",price:35},
+        {id:"lu-pig-head",name:"豬頭皮",price:30},
+        {id:"lu-pig-ear",name:"豬耳朵",price:30},
         {id:"lu-king-oyster",name:"杏鮑菇",price:25},
         {id:"lu-baby-cabbage",name:"娃娃菜",price:25},
-        {id:"lu-peanut",name:"花生",price:20}
-      ]},
-      {name:"副食類",items:[
+        {id:"lu-chicken-feet",name:"雞爪（4隻）",price:20},
+        {id:"lu-cabbage",name:"高麗菜",price:20},
+        {id:"lu-wood-ear",name:"木耳",price:20},
+        {id:"lu-peanut",name:"花生",price:20},
         {id:"lu-sausage",name:"小熱狗（4條）",price:20},
         {id:"lu-quail-egg",name:"小烏蛋（4顆）",price:20},
+        {id:"lu-blood-cake",name:"米血",price:20},
         {id:"lu-tofu",name:"豆乾",price:15},
         {id:"lu-tempura",name:"甜不辣",price:15},
-        {id:"lu-blood-cake",name:"米血",price:20},
-        {id:"lu-kelp",name:"海帶",price:15}
-      ]},
-      {name:"麵類",items:[
+        {id:"lu-kelp",name:"海帶",price:15},
         {id:"lu-science-noodle",name:"科學麵",price:15},
         {id:"lu-steamed-noodle",name:"蒸煮麵",price:15},
         {id:"lu-pot-noodle",name:"鍋燒意麵",price:15}
