@@ -35,13 +35,14 @@ function productCard(p){
   d.querySelectorAll('.qty button').forEach(b=>b.addEventListener('click',()=>{const k=key(p,selections[p.id]);state[k]=Math.max(0,(state[k]||0)+Number(b.dataset.d));refresh();render();}));
   if(p.addons){
     const panel=document.createElement('div');panel.className='rice-addons';
-    panel.innerHTML='<div class="option-label">加購配料｜選擇後調整份數</div><div class="opts">'+p.addons.map((o,i)=>`<button type="button" class="opt" data-addon="${i}">${o.name} +${money(o.price)}</button>`).join('')+'</div><div class="qty-wrap"><span class="qty-label">加購份數</span><div class="qty"><button type="button" data-ad="-1">−</button><b>0</b><button type="button" data-ad="1">＋</button></div></div><div class="flavor-counts addon-counts"></div>';
+    panel.innerHTML='<div class="option-label">加購配料｜選擇後調整份數</div><div class="opts"><button type="button" class="opt" data-addon="none">無</button>'+p.addons.map((o,i)=>`<button type="button" class="opt" data-addon="${i}">${o.name} +${money(o.price)}</button>`).join('')+'</div><div class="qty-wrap"><span class="qty-label">加購份數</span><div class="qty"><button type="button" data-ad="-1">−</button><b>0</b><button type="button" data-ad="1">＋</button></div></div><div class="flavor-counts addon-counts"></div>';
     d.querySelector('.product-content').appendChild(panel);
-    let chosen=0;
+    let chosen='none';
+    d.querySelector('.product-content > .qty-wrap').style.display='none';
     p.addons.forEach((o,i)=>state[key(p,'addon'+i)]=0);
-    const update=()=>{panel.querySelector('.qty b').textContent=state[key(p,'addon'+chosen)]||0;panel.querySelector('.addon-counts').innerHTML=p.addons.map((o,i)=>state[key(p,'addon'+i)]>0?`<span>${o.name} × ${state[key(p,'addon'+i)]}</span>`:'').join('');};
-    panel.querySelectorAll('[data-addon]').forEach(b=>b.addEventListener('click',()=>{chosen=Number(b.dataset.addon);panel.querySelectorAll('[data-addon]').forEach(x=>x.classList.toggle('selected',x===b));update();}));
-    panel.querySelectorAll('[data-ad]').forEach(b=>b.addEventListener('click',()=>{const k=key(p,'addon'+chosen);state[k]=Math.max(0,(state[k]||0)+Number(b.dataset.ad));update();render();}));
+    const update=()=>{panel.querySelector('.qty b').textContent=state[chosen==='none'?key(p):key(p,'addon'+chosen)]||0;panel.querySelector('.addon-counts').innerHTML=p.addons.map((o,i)=>state[key(p,'addon'+i)]>0?`<span>${o.name} × ${state[key(p,'addon'+i)]}</span>`:'').join('');};
+    panel.querySelectorAll('[data-addon]').forEach(b=>b.addEventListener('click',()=>{chosen=b.dataset.addon==='none'?'none':Number(b.dataset.addon);panel.querySelectorAll('[data-addon]').forEach(x=>x.classList.toggle('selected',x===b));update();}));
+    panel.querySelectorAll('[data-ad]').forEach(b=>b.addEventListener('click',()=>{const k=chosen==='none'?key(p):key(p,'addon'+chosen);state[k]=Math.max(0,(state[k]||0)+Number(b.dataset.ad));update();render();}));
     panel.querySelector('[data-addon]').classList.add('selected');update();
   }
   refresh(); return d;
@@ -53,7 +54,6 @@ const luSection=document.createElement('section'); luSection.className='menu-cat
 luSection.innerHTML=`
   <div class="category-title-row">
     <h3 class="category-title">🌙 滷味類</h3>
-    <span class="hours-tag">${luwei.hours}</span>
   </div>
   <div class="luwei-notice">⚠️ 滷味消費滿 $100 才提供盒裝<br>⚠️ 單份未滿 $50 加收拌炒費 $20</div>
   <div id="luwei-servings"></div>
