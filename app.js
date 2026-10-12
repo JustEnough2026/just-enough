@@ -33,6 +33,17 @@ function productCard(p){
   const refresh=()=>{const opt=selections[p.id];qtyEl.textContent=state[key(p,opt)]||0;if(countsEl)countsEl.innerHTML=p.options.filter(o=>(state[key(p,o)]||0)>0).map(o=>`<span>${o} × ${state[key(p,o)]}</span>`).join('');};
   d.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{selections[p.id]=b.dataset.opt;d.querySelectorAll('.opt').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');refresh();}));
   d.querySelectorAll('.qty button').forEach(b=>b.addEventListener('click',()=>{const k=key(p,selections[p.id]);state[k]=Math.max(0,(state[k]||0)+Number(b.dataset.d));refresh();render();}));
+  if(p.addons){
+    const panel=document.createElement('div');panel.className='rice-addons';
+    panel.innerHTML='<div class="option-label">加購配料｜選擇後調整份數</div><div class="opts">'+p.addons.map((o,i)=>`<button type="button" class="opt" data-addon="${i}">${o.name} +${money(o.price)}</button>`).join('')+'</div><div class="qty-wrap"><span class="qty-label">加購份數</span><div class="qty"><button type="button" data-ad="-1">−</button><b>0</b><button type="button" data-ad="1">＋</button></div></div><div class="flavor-counts addon-counts"></div>';
+    d.querySelector('.product-content').appendChild(panel);
+    let chosen=0;
+    p.addons.forEach((o,i)=>state[key(p,'addon'+i)]=0);
+    const update=()=>{panel.querySelector('.qty b').textContent=state[key(p,'addon'+chosen)]||0;panel.querySelector('.addon-counts').innerHTML=p.addons.map((o,i)=>state[key(p,'addon'+i)]>0?`<span>${o.name} × ${state[key(p,'addon'+i)]}</span>`:'').join('');};
+    panel.querySelectorAll('[data-addon]').forEach(b=>b.addEventListener('click',()=>{chosen=Number(b.dataset.addon);panel.querySelectorAll('[data-addon]').forEach(x=>x.classList.toggle('selected',x===b));update();}));
+    panel.querySelectorAll('[data-ad]').forEach(b=>b.addEventListener('click',()=>{const k=key(p,'addon'+chosen);state[k]=Math.max(0,(state[k]||0)+Number(b.dataset.ad));update();render();}));
+    panel.querySelector('[data-addon]').classList.add('selected');update();
+  }
   refresh(); return d;
 }
 products.forEach(p=>categoryLists[p.category].appendChild(productCard(p)));
@@ -110,13 +121,13 @@ addLuweiServing();
 
 function lines(){
   const out=[];
-  products.forEach(p=>{if(p.options)p.options.forEach(opt=>{const q=state[key(p,opt)]||0;if(q>0)out.push({name:p.name,opt,q,price:p.price});});else{const q=state[key(p)]||0;if(q>0)out.push({name:p.name,opt:'',q,price:p.price});}});
+  products.forEach(p=>{if(p.options)p.options.forEach(opt=>{const q=state[key(p,opt)]||0;if(q>0)out.push({name:p.name,opt,q,price:p.price});});else{const q=state[key(p)]||0;if(q>0)out.push({name:p.name,opt:'',q,price:p.price});if(p.addons)p.addons.forEach((o,i)=>{const aq=state[key(p,'addon'+i)]||0;if(aq>0)out.push({name:p.name,opt:o.name,q:aq,price:p.price+o.price});});}});
   luweiServings.forEach((serving,si)=>allLuItems.forEach(item=>{const q=serving.qty[item.id]||0;if(q>0)out.push({name:item.name,opt:serving.spice,q,price:item.price,luwei:true,serving:si+1});}));
   return out;
 }
 function totals(){
   let c=0,t=0;
-  products.forEach(p=>{if(p.options)p.options.forEach(opt=>{const q=state[key(p,opt)]||0;c+=q;t+=q*p.price;});else{const q=state[key(p)]||0;c+=q;t+=q*p.price;}});
+  products.forEach(p=>{if(p.options)p.options.forEach(opt=>{const q=state[key(p,opt)]||0;c+=q;t+=q*p.price;});else{const q=state[key(p)]||0;c+=q;t+=q*p.price;if(p.addons)p.addons.forEach((o,i)=>{const aq=state[key(p,'addon'+i)]||0;c+=aq;t+=aq*(p.price+o.price);});}});
   luweiServings.forEach(s=>{if(servingCount(s)>0){c+=1;t+=servingSubtotal(s);}});
   return[c,t];
 }
@@ -126,7 +137,7 @@ function orderText(){
   let totalMoney=0,totalServings=0;
   products.forEach(p=>{
     if(p.options)p.options.forEach(opt=>{const q=state[key(p,opt)]||0;if(q>0){const subtotal=q*p.price;parts.push(`${p.name}(${opt})*${q} ${money(subtotal)}`);totalMoney+=subtotal;totalServings+=q;}});
-    else{const q=state[key(p)]||0;if(q>0){const subtotal=q*p.price;parts.push(`${p.name}*${q} ${money(subtotal)}`);totalMoney+=subtotal;totalServings+=q;}}
+    else{const q=state[key(p)]||0;if(q>0){const subtotal=q*p.price;parts.push(`${p.name}*${q} ${money(subtotal)}`);totalMoney+=subtotal;totalServings+=q;}if(p.addons)p.addons.forEach((o,i)=>{const aq=state[key(p,'addon'+i)]||0;if(aq>0){const sum=aq*(p.price+o.price);parts.push(`${p.name}(${o.name})*${aq} ${money(sum)}`);totalMoney+=sum;totalServings+=aq;}});}
   });
   luweiServings.forEach((serving,index)=>{
     const chosen=allLuItems.filter(item=>(serving.qty[item.id]||0)>0);
