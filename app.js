@@ -12,6 +12,7 @@ $('#info-address').textContent=store.address;
 
 const list=$('#product-list');
 const categoryOrder=[
+  ['冬季限定｜麻油系列',''],
   ['雞肉類',''],
   ['涼粉類',''],
   ['飯類','全天供應'],

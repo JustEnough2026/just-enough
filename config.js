@@ -12,6 +12,11 @@ window.STORE_CONFIG = {
     uberEats: ""
   },
   products: [
+    {id:"winter-noodles",name:"麻油雞麵線",price:120,image:"winter_chicken.jpg",category:"冬季限定｜麻油系列"},
+    {id:"winter-vermicelli",name:"麻油雞冬粉",price:120,image:"winter_chicken.jpg",category:"冬季限定｜麻油系列"},
+    {id:"winter-soup-rice",name:"麻油雞湯飯",price:120,image:"winter_chicken.jpg",category:"冬季限定｜麻油系列"},
+    {id:"winter-blood",name:"麻油米血",price:50,category:"冬季限定｜麻油系列"},
+    {id:"winter-egg",name:"麻油煎蛋",price:20,category:"冬季限定｜麻油系列"},
     {id:"kou",name:"口水雞（辣）",price:180,image:"spicy_chicken.jpg",category:"雞肉類"},
     {id:"oil-q",name:"油雞（四分之一）",price:150,image:"oil_quarter.jpg",category:"雞肉類"},
     {id:"oil-h",name:"油雞（半雞）",price:250,image:"oil_half.jpg",category:"雞肉類"},
